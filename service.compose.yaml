@@ -13,3 +13,18 @@ services:
     hostname: project-task-api
     networks:
       - asp-net-web-api
+  db:
+    image: postgres:16
+    container_name: postgres
+    hostname: postgres
+    environment:
+      POSTGRES_DB: projecttask
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - pta_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  pta_postgres_data:
