@@ -1,0 +1,15 @@
+networks:
+  asp-net-web-api:
+    name: asp-net-web-api
+
+services:
+  project-task-api:
+    image: project-task-api:latest
+    container_name: project-task-api
+    build:
+      dockerfile: ./Dockerfile
+    ports:
+      - 8080:8080
+    hostname: project-task-api
+    networks:
+      - asp-net-web-api
