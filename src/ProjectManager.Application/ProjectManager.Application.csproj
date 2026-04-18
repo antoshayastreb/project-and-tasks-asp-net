@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\ProjectTask.Application\ProjectTask.Application.csproj" />
+    <ProjectReference Include="..\ProjectManager.Domain\ProjectManager.Domain.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -1,6 +1,6 @@
-using ProjectTask.Domain.Common;
+using ProjectManager.Domain.Common;
 
-namespace ProjectTask.Domain.Entities;
+namespace ProjectManager.Domain.Entities;
 
 /// <summary>
 /// Сущность "Задача"(Task).

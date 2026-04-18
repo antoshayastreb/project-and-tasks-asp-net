@@ -5,13 +5,13 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B74A5F6C-4DEB-4BCE-9748-BB8B0F17FCC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectTask.Api", "src\ProjectTask.Api\ProjectTask.Api.csproj", "{2019188F-C698-427B-8124-6B27D76FA2F9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectManager.Api", "src\ProjectManager.Api\ProjectManager.Api.csproj", "{2019188F-C698-427B-8124-6B27D76FA2F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectTask.Application", "src\ProjectTask.Application\ProjectTask.Application.csproj", "{696E9D96-F7F2-4346-8328-EA8FE7603CAC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectManager.Application", "src\ProjectManager.Application\ProjectManager.Application.csproj", "{696E9D96-F7F2-4346-8328-EA8FE7603CAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectTask.Infrastructure", "src\ProjectTask.Infrastructure\ProjectTask.Infrastructure.csproj", "{07B9AFD3-FBE6-4B56-AA31-6C677C37D9B8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectManager.Infrastructure", "src\ProjectManager.Infrastructure\ProjectManager.Infrastructure.csproj", "{07B9AFD3-FBE6-4B56-AA31-6C677C37D9B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectTask.Domain", "src\ProjectTask.Domain\ProjectTask.Domain.csproj", "{E2D14B12-C41B-4268-938F-30A8E6934E93}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectManager.Domain", "src\ProjectManager.Domain\ProjectManager.Domain.csproj", "{E2D14B12-C41B-4268-938F-30A8E6934E93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

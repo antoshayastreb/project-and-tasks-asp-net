@@ -3,13 +3,31 @@ networks:
     name: asp-net-web-api
 
 services:
-  project-task-api:
-    image: project-task-api:latest
-    container_name: project-task-api
+  project-manager-api:
+    image: project-manager-api:latest
+    container_name: project-manager-api
     build:
       dockerfile: ./Dockerfile
     ports:
       - 8080:8080
-    hostname: project-task-api
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=project_manager;Username=postgres;Password=postgres
+    hostname: project-manager-api
     networks:
       - asp-net-web-api
+  db:
+    image: postgres:16
+    container_name: postgres
+    hostname: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - pta_postgres_data:/var/lib/postgresql/data
+    networks:
+      - asp-net-web-api
+
+volumes:
+  pta_postgres_data:
