@@ -1,6 +1,6 @@
-using ProjectTask.Domain.Common;
+using ProjectManager.Domain.Common;
 
-namespace ProjectTask.Domain.Entities;
+namespace ProjectManager.Domain.Entities;
 
 /// <summary>
 /// Сущность "Проект".
@@ -8,9 +8,9 @@ namespace ProjectTask.Domain.Entities;
 public class Project : BaseEntity
 {
 
-    public Project (string title, string? description)
+    public Project (string name, string? description)
     {
-        Title = title;
+        Name = name;
         Description = description;
     }
 
@@ -19,7 +19,7 @@ public class Project : BaseEntity
     /// <summary>
     /// Название.
     /// </summary>
-    public string Title { get; private set; }
+    public string Name { get; private set; }
 
     /// <summary>
     /// Описание.

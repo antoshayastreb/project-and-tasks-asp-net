@@ -1,4 +1,4 @@
-namespace ProjectTask.Domain.Common;
+namespace ProjectManager.Domain.Common;
 
 /// <summary>
 /// Базовый класс доменной сущности.

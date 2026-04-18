@@ -6,10 +6,10 @@
     "configurations": [
         
         {
-            "name": "C#: ProjectTask.Api Debug",
+            "name": "C#: ProjectManager.Api Debug",
             "type": "dotnet",
             "request": "launch",
-            "projectPath": "${workspaceFolder}/src/ProjectTask.Api/ProjectTask.Api.csproj",
+            "projectPath": "${workspaceFolder}/src/ProjectManager.Api/ProjectManager.Api.csproj",
         }
 
     ]
