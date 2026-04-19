@@ -1,4 +1,4 @@
-namespace ProjectManager.Application.DTOs.Projects;
+namespace ProjectManager.Application.DTOs.Project;
 
 /// <summary>
 /// DTO для возврата сущности Project

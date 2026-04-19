@@ -1,4 +1,4 @@
-using ProjectManager.Application.DTOs.Projects;
+using ProjectManager.Application.DTOs.Project;
 
 namespace ProjectManager.Application.Queries;
 

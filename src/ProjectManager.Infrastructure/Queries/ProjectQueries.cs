@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ProjectManager.Application.DTOs.Projects;
+using ProjectManager.Application.DTOs.Project;
 using ProjectManager.Application.Queries;
 using ProjectManager.Infrastructure.Persistence;
 

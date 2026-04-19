@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectManager.Application.Queries;
+using ProjectManager.Application.Services;
+using ProjectManager.Domain.Repositories;
 using ProjectManager.Infrastructure.Persistence;
+using ProjectManager.Infrastructure.Persistence.Repositories;
 using ProjectManager.Infrastructure.Queries;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +19,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 builder.Services.AddScoped<IProjectQueries, ProjectQueries>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 

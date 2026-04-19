@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using ProjectManager.Application.DTOs.Projects;
+using ProjectManager.Application.DTOs.Project;
 using ProjectManager.Application.Queries;
+using ProjectManager.Application.Services;
 
 namespace ProjectManager.Api.Controllers;
 
@@ -14,9 +15,12 @@ public class ProjectsController : ControllerBase
 
     private readonly IProjectQueries _projectQueries;
 
-    public ProjectsController(IProjectQueries queries)
+    private readonly IProjectService _projectService;
+
+    public ProjectsController(IProjectQueries queries, IProjectService service)
     {
         _projectQueries = queries;
+        _projectService = service;
     }
 
     /// <summary>
@@ -51,5 +55,15 @@ public class ProjectsController : ControllerBase
     {
         var project = await _projectQueries.GetByIdAsync(id, ct);
         return project is null ? NotFound() : Ok(project);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<Guid>> Create(
+        [FromBody] CreateProjectDto dto,
+        CancellationToken ct = default
+    )
+    {
+        var id = await _projectService.CreateAsync(dto, ct);
+        return id;
     }
 }
