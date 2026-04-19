@@ -4,6 +4,12 @@
     <ProjectReference Include="..\ProjectManager.Domain\ProjectManager.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTOs/" />
+    <Folder Include="DTOs/Projects/" />
+    <Folder Include="DTOs/ProjectTasks/" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
