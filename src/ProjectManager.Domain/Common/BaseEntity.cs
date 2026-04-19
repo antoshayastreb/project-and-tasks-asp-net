@@ -19,5 +19,5 @@ public abstract class BaseEntity
     /// <summary>
     /// Дата последнего обновления.
     /// </summary>
-    public DateTime UpdatedAt { get; protected set; }
+    public DateTime? UpdatedAt { get; protected set; }
 }
