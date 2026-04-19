@@ -5,9 +5,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs/" />
-    <Folder Include="DTOs/Projects/" />
     <Folder Include="DTOs/ProjectTasks/" />
+    <Folder Include="Queries/" />
+    <Folder Include="Services/" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using ProjectManager.Application.Queries;
 using ProjectManager.Infrastructure.Persistence;
+using ProjectManager.Infrastructure.Queries;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
+
+builder.Services.AddScoped<IProjectQueries, ProjectQueries>();
 
 var app = builder.Build();
 

@@ -21,3 +21,13 @@ public record ProjectListDto (
     DateTime CreatedAt, 
     DateTime? UpdatedAt    
 );
+
+/// <summary>
+/// DTO для создания сущности Project
+/// </summary>
+/// <param name="Name"></param>
+/// <param name="Description"></param>
+public record CreateProjectDto (
+    string Name,
+    string? Description
+);
