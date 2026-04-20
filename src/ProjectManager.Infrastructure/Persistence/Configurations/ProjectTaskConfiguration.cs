@@ -13,6 +13,9 @@ public class ProjectTaskConfiguration : IEntityTypeConfiguration<ProjectTask>
         builder.ToTable("project_tasks");
 
         builder.HasKey(m => m.Id);
+        // Отключение генерации для pk
+        // Генерация Id остается внутри приложения
+        builder.Property(m => m.Id).ValueGeneratedNever();
 
         builder.Property(m => m.Title)
             .IsRequired()

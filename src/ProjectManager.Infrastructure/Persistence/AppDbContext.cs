@@ -9,6 +9,8 @@ public class AppDbContext : DbContext
 
     public DbSet<Project> Projects => Set<Project>();
 
+    public DbSet<ProjectTask> ProjectTasks => Set<ProjectTask>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);

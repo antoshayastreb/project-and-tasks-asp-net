@@ -14,6 +14,9 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Project>
         builder.ToTable("projects");
 
         builder.HasKey(m => m.Id);
+        // Отключение генерации для pk
+        // Генерация Id остается внутри приложения
+        builder.Property(m => m.Id).ValueGeneratedNever();
 
         builder.Property(m => m.Name)
             .IsRequired()
