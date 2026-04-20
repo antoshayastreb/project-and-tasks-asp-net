@@ -1,4 +1,3 @@
-using System;
 using ProjectManager.Application.DTOs.Project;
 
 namespace ProjectManager.Application.Services;

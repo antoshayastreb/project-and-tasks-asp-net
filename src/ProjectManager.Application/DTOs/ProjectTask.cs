@@ -1,4 +1,4 @@
-namespace ProjectManager.Application.DTOs;
+namespace ProjectManager.Application.DTOs.ProjectTask;
 
 /// <summary>
 /// DTO для возврата сущности ProjectTask.
@@ -6,7 +6,7 @@ namespace ProjectManager.Application.DTOs;
 /// <param name="Id"></param>
 /// <param name="Title"></param>
 /// <param name="Description"></param>
-/// <param name="isCompleted"></param>
+/// <param name="IsCompleted"></param>
 /// <param name="ProjectId"></param>
 /// <param name="CreatedAt"></param>
 /// <param name="UpdatedAt"></param>
@@ -14,8 +14,26 @@ public record ProjectTaskDto (
     Guid Id,
     string Title,
     string? Description,
-    bool isCompleted,
+    bool IsCompleted,
     Guid ProjectId,
+    DateTime CreatedAt, 
+    DateTime? UpdatedAt
+);
+
+/// <summary>
+/// DTO для возврата списочного элемента ProjectTask.
+/// </summary>
+/// <param name="Id"></param>
+/// <param name="Title"></param>
+/// <param name="Description"></param>
+/// <param name="IsCompleted"></param>
+/// <param name="CreatedAt"></param>
+/// <param name="UpdatedAt"></param>
+public record ProjectTaskListItemDto (
+    Guid Id,
+    string Title,
+    string? Description,
+    bool IsCompleted,
     DateTime CreatedAt, 
     DateTime? UpdatedAt
 );

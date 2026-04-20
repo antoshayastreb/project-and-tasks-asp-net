@@ -31,13 +31,13 @@ public class ProjectsController : ControllerBase
     /// <param name="ct"></param>
     /// <returns></returns>
     [HttpGet]
-    public Task<IReadOnlyList<ProjectListDto>> GetAll(
+    public async Task<IReadOnlyList<ProjectListDto>> GetAll(
         [FromQuery] int page = 1, 
         [FromQuery] int pageSize = 10,
         CancellationToken ct = default
     )
     {
-        return _projectQueries.GetAllAsync(page, pageSize, ct);
+        return await _projectQueries.GetAllAsync(page, pageSize, ct);
     }
 
     /// <summary>

@@ -21,6 +21,11 @@ public class ProjectRepository : IProjectRepository
         await _dbContext.Projects.AddAsync(project, ct);
     }
 
+    public async Task<bool> ExistsAsync(Guid id, CancellationToken ct)
+    {
+        return await _dbContext.Projects.AnyAsync(p => p.Id == id);
+    }
+
     public async Task<Project?> GetByIdAsync(Guid id, CancellationToken ct)
     {
         return await _dbContext.Projects.Include(p => p.Tasks)

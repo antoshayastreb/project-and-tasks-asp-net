@@ -28,8 +28,13 @@ public interface IProjectRepository
     /// Удаляет сущность Project из хранилища.
     /// </summary>
     /// <param name="project"></param>
-    /// <param name="ct"></param>
-    /// <returns></returns>
     void Remove(Project project);
     
+    /// <summary>
+    /// Проверка на существование Project.
+    /// </summary>
+    /// <param name="id">Идентификатор проекта</param>
+    /// <param name="ct"></param>
+    /// <returns></returns>
+    Task<bool> ExistsAsync(Guid id, CancellationToken ct);
 }

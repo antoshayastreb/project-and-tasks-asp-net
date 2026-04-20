@@ -1,3 +1,5 @@
+using ProjectManager.Application.DTOs.ProjectTask;
+
 namespace ProjectManager.Application.DTOs.Project;
 
 /// <summary>
@@ -7,8 +9,9 @@ public record ProjectDto (
     Guid Id, 
     string Name, 
     string? Description, 
-    DateTime CreatedAt, 
-    DateTime? UpdatedAt
+    DateTime CreatedAt,
+    DateTime? UpdatedAt,
+    IReadOnlyList<ProjectTaskListItemDto> Tasks
 );
 
 /// <summary>

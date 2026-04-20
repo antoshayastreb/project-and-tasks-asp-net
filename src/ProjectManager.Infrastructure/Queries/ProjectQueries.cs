@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectManager.Application.DTOs.Project;
+using ProjectManager.Application.DTOs.ProjectTask;
 using ProjectManager.Application.Queries;
 using ProjectManager.Infrastructure.Persistence;
 
@@ -24,7 +25,15 @@ public class ProjectQueries : IProjectQueries
                 p.Name,
                 p.Description,
                 p.CreatedAt,
-                p.UpdatedAt
+                p.UpdatedAt,
+                p.Tasks.Select(t => new ProjectTaskListItemDto(
+                    t.Id,
+                    t.Title,
+                    t.Description,
+                    t.IsCompleted,
+                    t.CreatedAt,
+                    t.UpdatedAt
+                )).ToList()
             ))
             .FirstOrDefaultAsync(ct);
     }
