@@ -57,6 +57,12 @@ public class ProjectsController : ControllerBase
         return project is null ? NotFound() : Ok(project);
     }
 
+    /// <summary>
+    /// Создать проект.
+    /// </summary>
+    /// <param name="dto">Тело запроса (dto)</param>
+    /// <param name="ct"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<ActionResult<Guid>> Create(
         [FromBody] CreateProjectDto dto,
@@ -65,5 +71,41 @@ public class ProjectsController : ControllerBase
     {
         var id = await _projectService.CreateAsync(dto, ct);
         return id;
+    }
+
+    /// <summary>
+    /// Обновить проект.
+    /// </summary>
+    /// <param name="id">Идентификатор проекта</param>
+    /// <param name="dto">Тело запроса (dto)</param>
+    /// <param name="ct"></param>
+    /// <returns></returns>
+    [HttpPut]
+    [Route("{id}")]
+    public async Task<IActionResult> Update(
+        Guid id, 
+        [FromBody] UpdateProjectDto dto,
+        CancellationToken ct = default
+    )
+    {
+        await _projectService.UpdateAsync(id, dto, ct);
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Удалить проект и все его задачи.
+    /// </summary>
+    /// <param name="id">Идентификатор проекта</param>
+    /// <param name="ct"></param>
+    /// <returns></returns>
+    [HttpDelete]
+    [Route("{id}")]
+    public async Task<IActionResult> Delete(
+        Guid id,
+        CancellationToken ct = default
+    )
+    {
+        await _projectService.RemoveAsync(id, ct);
+        return NoContent();
     }
 }

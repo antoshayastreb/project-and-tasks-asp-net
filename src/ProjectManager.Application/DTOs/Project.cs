@@ -31,3 +31,13 @@ public record CreateProjectDto (
     string Name,
     string? Description
 );
+
+/// <summary>
+/// DTO для обновления сущности Project
+/// </summary>
+/// <param name="Name"></param>
+/// <param name="Description"></param>
+public record UpdateProjectDto (
+    string? Name,
+    string? Description
+);

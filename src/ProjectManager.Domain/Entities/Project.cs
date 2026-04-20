@@ -51,4 +51,16 @@ public class Project : BaseEntity
         _tasks.Add(task);
         return task;
     }
+
+    public void ChangeName(string name)
+    {
+        this.Name = name;
+        this.UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void ChangeDescription(string? description)
+    {
+        this.Description = description;
+        this.UpdatedAt = DateTime.UtcNow;
+    }
 }
