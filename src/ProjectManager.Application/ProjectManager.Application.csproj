@@ -8,6 +8,11 @@
     <Folder Include="Exceptions/" />
     <Folder Include="Queries/" />
     <Folder Include="Services/" />
+    <Folder Include="Validators/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
   </ItemGroup>
 
   <PropertyGroup>

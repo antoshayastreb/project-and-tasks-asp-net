@@ -1,4 +1,6 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using ProjectManager.Application.DTOs.Project;
 using ProjectManager.Application.Queries;
 using ProjectManager.Application.Services;
 using ProjectManager.Domain.Repositories;
@@ -25,6 +27,8 @@ builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectTaskService, ProjectTaskService>();
 builder.Services.AddScoped<IProjectTaskQueries, ProjectTaskQueries>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateProjectDto>();
 
 var app = builder.Build();
 
