@@ -1,4 +1,4 @@
-using System;
+using FluentValidation;
 using ProjectManager.Application.DTOs.Project;
 using ProjectManager.Application.Exceptions;
 using ProjectManager.Domain.Entities;
@@ -9,14 +9,24 @@ namespace ProjectManager.Application.Services;
 public class ProjectService : IProjectService
 {
     private IUnitOfWork _uow;
+    private readonly IValidator<CreateProjectDto> _createValidator;
+    private readonly IValidator<UpdateProjectDto> _updateValidator;
 
-    public ProjectService(IUnitOfWork uow)
+    public ProjectService(
+        IUnitOfWork uow, 
+        IValidator<CreateProjectDto> createValidator,
+        IValidator<UpdateProjectDto> updateValidator
+    )
     {
         _uow = uow;
+        _createValidator = createValidator;
+        _updateValidator = updateValidator;
     }
 
     public async Task<Guid> CreateAsync(CreateProjectDto dto, CancellationToken ct)
     {
+        await _createValidator.ValidateAndThrowAsync(dto, ct);
+
         var project = new Project(name: dto.Name, description: dto.Description);
         await _uow.Projects.AddAsync(project, ct);
         await _uow.SaveChangesAsync(ct);
@@ -34,6 +44,8 @@ public class ProjectService : IProjectService
 
     public async Task UpdateAsync(Guid id, UpdateProjectDto dto, CancellationToken ct)
     {
+        await _updateValidator.ValidateAndThrowAsync(dto, ct);
+
         var project = await _uow.Projects.GetByIdAsync(id, ct);
         if (project is null)
             throw new NotFoundException(nameof(Project), id);
