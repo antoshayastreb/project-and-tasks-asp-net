@@ -21,11 +21,13 @@ public class GlobalExceptionHandler : IExceptionHandler
 
     private readonly ILogger<GlobalExceptionHandler> _logger;
 
+    /// <inheritdoc/>
     public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
     {
         _logger = logger;
     }
 
+    /// <inheritdoc/>
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
         _logger.LogError(exception, "Exception occurred: {Message}", exception.Message);

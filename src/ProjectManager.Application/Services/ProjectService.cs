@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using ProjectManager.Application.Caching;
 using ProjectManager.Application.DTOs.Project;
 using ProjectManager.Application.Exceptions;
 using ProjectManager.Domain.Entities;
@@ -9,8 +10,9 @@ namespace ProjectManager.Application.Services;
 
 public class ProjectService : IProjectService
 {
-    private ILogger<ProjectService> _logger;
-    private IUnitOfWork _uow;
+    private readonly ILogger<ProjectService> _logger;
+    private readonly ICacheInvalidator _cacheInvalidator;
+    private readonly IUnitOfWork _uow;
     private readonly IValidator<CreateProjectDto> _createValidator;
     private readonly IValidator<UpdateProjectDto> _updateValidator;
 
@@ -18,13 +20,15 @@ public class ProjectService : IProjectService
         IUnitOfWork uow,
         ILogger<ProjectService> logger,
         IValidator<CreateProjectDto> createValidator,
-        IValidator<UpdateProjectDto> updateValidator
+        IValidator<UpdateProjectDto> updateValidator,
+        ICacheInvalidator cacheInvalidator
     )
     {
         _uow = uow;
         _logger = logger;
         _createValidator = createValidator;
         _updateValidator = updateValidator;
+        _cacheInvalidator = cacheInvalidator;
     }
 
     public async Task<Guid> CreateAsync(CreateProjectDto dto, CancellationToken ct)
@@ -58,6 +62,8 @@ public class ProjectService : IProjectService
         _logger.LogInformation("Project {ProjectId} deleted", id);
 
         await _uow.SaveChangesAsync(ct);
+
+        _cacheInvalidator.InvalidateCache(CacheKeys.ProjectById(id));
     }
 
     public async Task UpdateAsync(Guid id, UpdateProjectDto dto, CancellationToken ct)
@@ -79,5 +85,7 @@ public class ProjectService : IProjectService
         );
 
         await _uow.SaveChangesAsync(ct);
+
+        _cacheInvalidator.InvalidateCache(CacheKeys.ProjectById(id));
     }
 }

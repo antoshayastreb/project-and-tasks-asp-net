@@ -1,11 +1,14 @@
 using System.Reflection;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using ProjectManager.Api.Middlewares;
+using ProjectManager.Application.Caching;
 using ProjectManager.Application.DTOs.Project;
 using ProjectManager.Application.Queries;
 using ProjectManager.Application.Services;
 using ProjectManager.Domain.Repositories;
+using ProjectManager.Infrastructure;
 using ProjectManager.Infrastructure.Persistence;
 using ProjectManager.Infrastructure.Persistence.Repositories;
 using ProjectManager.Infrastructure.Queries;
@@ -41,12 +44,26 @@ try
     builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseNpgsql(connectionString));
 
+    builder.Services.AddMemoryCache();
+    builder.Services.AddScoped<ICacheInvalidator, CacheInvalidator>();
     builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
     builder.Services.AddScoped<IProjectTaskRepository, ProjectTaskRepository>();
-    builder.Services.AddScoped<IProjectQueries, ProjectQueries>();
+    builder.Services.AddScoped<ProjectQueries>();
+    builder.Services.AddScoped<IProjectQueries>(sp => 
+        new CachedProjectQueries(
+            innerQueries: sp.GetRequiredService<ProjectQueries>(),
+            cache: sp.GetRequiredService<IMemoryCache>()
+        )
+    );
     builder.Services.AddScoped<IProjectService, ProjectService>();
     builder.Services.AddScoped<IProjectTaskService, ProjectTaskService>();
-    builder.Services.AddScoped<IProjectTaskQueries, ProjectTaskQueries>();
+    builder.Services.AddScoped<ProjectTaskQueries>();
+    builder.Services.AddScoped<IProjectTaskQueries>(sp => 
+        new CachedProjectTaskQueries(
+            innerQueries: sp.GetRequiredService<ProjectTaskQueries>(),
+            cache: sp.GetRequiredService<IMemoryCache>()
+        )
+    );
     builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
     builder.Services.AddValidatorsFromAssemblyContaining<CreateProjectDto>();
