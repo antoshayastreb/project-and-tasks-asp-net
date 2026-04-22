@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using ProjectManager.Api.Models;
 using ProjectManager.Application.DTOs.Project;
 using ProjectManager.Application.Queries;
 using ProjectManager.Application.Services;
@@ -17,6 +18,7 @@ public class ProjectsController : ControllerBase
 
     private readonly IProjectService _projectService;
 
+    /// <inheritdoc/>
     public ProjectsController(IProjectQueries queries, IProjectService service)
     {
         _projectQueries = queries;
@@ -31,6 +33,8 @@ public class ProjectsController : ControllerBase
     /// <param name="ct"></param>
     /// <returns></returns>
     [HttpGet]
+    [ProducesResponseType(typeof(IReadOnlyList<ProjectListDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]    
     public async Task<IReadOnlyList<ProjectListDto>> GetAll(
         [FromQuery] int page = 1, 
         [FromQuery] int pageSize = 10,
@@ -48,6 +52,9 @@ public class ProjectsController : ControllerBase
     /// <returns></returns>
     [HttpGet]
     [Route("{id}")]
+    [ProducesResponseType(typeof(ProjectDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]    
     public async Task<ActionResult<ProjectDto?>> Get(
         Guid id,
         CancellationToken ct = default
@@ -64,6 +71,9 @@ public class ProjectsController : ControllerBase
     /// <param name="ct"></param>
     /// <returns></returns>
     [HttpPost]
+    [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]      
     public async Task<ActionResult<Guid>> Create(
         [FromBody] CreateProjectDto dto,
         CancellationToken ct = default
@@ -82,7 +92,10 @@ public class ProjectsController : ControllerBase
     /// <returns></returns>
     [HttpPut]
     [Route("{id}")]
-    public async Task<IActionResult> Update(
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]     
+    public async Task<ActionResult> Update(
         Guid id, 
         [FromBody] UpdateProjectDto dto,
         CancellationToken ct = default
@@ -100,7 +113,10 @@ public class ProjectsController : ControllerBase
     /// <returns></returns>
     [HttpDelete]
     [Route("{id}")]
-    public async Task<IActionResult> Delete(
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)] 
+    public async Task<ActionResult> Delete(
         Guid id,
         CancellationToken ct = default
     )
