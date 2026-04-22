@@ -1,10 +1,8 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ProjectManager.Application.DTOs.Project;
+using ProjectManager.Api.Models;
 using ProjectManager.Application.DTOs.ProjectTask;
 using ProjectManager.Application.Queries;
 using ProjectManager.Application.Services;
-using ProjectManager.Domain.Entities;
 
 namespace ProjectManager.Api.Controllers
 {
@@ -13,11 +11,13 @@ namespace ProjectManager.Api.Controllers
     /// </summary>
     [Route("api/tasks")]
     [ApiController]
+    [Produces("application/json")]
     public class ProjectTaskController : ControllerBase
     {
         private readonly IProjectTaskService _service;
         private readonly IProjectTaskQueries _queries;
-
+        
+        /// <inheritdoc/>
         public ProjectTaskController(IProjectTaskService service, IProjectTaskQueries queries)
         {
             _service = service;
@@ -32,6 +32,9 @@ namespace ProjectManager.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("{id}")]
+        [ProducesResponseType(typeof(ProjectTaskDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<ProjectTaskDto?>> Get(
             Guid id,
             CancellationToken ct = default
@@ -49,6 +52,8 @@ namespace ProjectManager.Api.Controllers
         /// <param name="ct"></param>
         /// <returns></returns>
         [HttpGet]
+        [ProducesResponseType(typeof(IReadOnlyList<ProjectTaskDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IReadOnlyList<ProjectTaskDto>> GetAll(
             [FromQuery] Guid? projectId,
             [FromQuery] bool? IsCompleted,
@@ -65,6 +70,10 @@ namespace ProjectManager.Api.Controllers
         /// <param name="ct"></param>
         /// <returns></returns>
         [HttpPost]
+        [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Guid>> Create(
             [FromBody] CreateProjectTaskDto dto,
             CancellationToken ct = default
@@ -82,13 +91,18 @@ namespace ProjectManager.Api.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("{id}")]
-        public async Task Update(
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> Update(
             Guid id,
             [FromBody] UpdateProjectTaskDto dto,
             CancellationToken ct = default
         )
         {
             await _service.UpdateAsync(id, dto, ct);
+            return NoContent();
         }
 
         /// <summary>
@@ -99,12 +113,17 @@ namespace ProjectManager.Api.Controllers
         /// <returns></returns>
         [HttpDelete]
         [Route("{id}")]
-        public async Task Delete(
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]        
+        public async Task<ActionResult> Delete(
             Guid id,
             CancellationToken ct = default
         )
         {
             await _service.RemoveAsync(id, ct);
+            return NoContent();
         }
     }
 }
