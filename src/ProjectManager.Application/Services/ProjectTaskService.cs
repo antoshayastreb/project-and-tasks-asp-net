@@ -1,4 +1,5 @@
 using FluentValidation;
+using Microsoft.Extensions.Logging;
 using ProjectManager.Application.DTOs.ProjectTask;
 using ProjectManager.Application.Exceptions;
 using ProjectManager.Domain.Entities;
@@ -8,7 +9,7 @@ namespace ProjectManager.Application.Services;
 
 public class ProjectTaskService : IProjectTaskService
 {
-
+    private ILogger<ProjectTaskService> _logger;
     private readonly IUnitOfWork _uow;
 
     private readonly IValidator<CreateProjectTaskDto> _createValidator;
@@ -16,17 +17,23 @@ public class ProjectTaskService : IProjectTaskService
 
     public ProjectTaskService(
         IUnitOfWork uow,
+        ILogger<ProjectTaskService> logger,
         IValidator<CreateProjectTaskDto> createValidator,
         IValidator<UpdateProjectTaskDto> updateValidator
     )
     {
         _uow = uow;
+        _logger = logger;
         _createValidator = createValidator;
         _updateValidator = updateValidator;
     }
 
     public async Task<Guid> CreateAsync(CreateProjectTaskDto dto, CancellationToken ct)
     {
+        _logger.LogInformation("Creating ProjectTask for Project {ProjectId}", 
+            dto.ProjectId
+        );
+
         await _createValidator.ValidateAndThrowAsync(dto, ct);
 
         var project = await _uow.Projects.GetByIdAsync(dto.ProjectId, ct);
@@ -37,21 +44,41 @@ public class ProjectTaskService : IProjectTaskService
             description: dto.Description,
             isCompleted: dto.IsCompleted
         );
+
+        _logger.LogInformation("ProjectTask {ProjectTaskId} for Project {ProjectId} created", 
+            task.Id, 
+            project.Id
+        );
+
         await _uow.SaveChangesAsync(ct);
         return task.Id;
     }
 
     public async Task RemoveAsync(Guid id, CancellationToken ct)
     {
+        _logger.LogInformation("Deleting ProjectTask {ProjectTaskId}", 
+            id
+        );
+
         var task = await _uow.ProjectTasks.GetByIdAsync(id, ct);
         if (task is null)
             throw new NotFoundException(nameof(ProjectTask), id);
         _uow.ProjectTasks.Remove(task);
+
+        _logger.LogInformation("ProjectTask {ProjectTaskId} deleted", 
+            task.Id
+        );
+
         await _uow.SaveChangesAsync(ct);
     }
 
     public async Task UpdateAsync(Guid id, UpdateProjectTaskDto dto, CancellationToken ct)
     {
+        _logger.LogInformation("Updating ProjectTask {ProjectTaskId} for Project {ProjectId}", 
+            id, 
+            dto.ProjectId
+        );
+
         await _updateValidator.ValidateAndThrowAsync(dto, ct);
 
         var task = await _uow.ProjectTasks.GetByIdAsync(id, ct);
@@ -70,6 +97,12 @@ public class ProjectTaskService : IProjectTaskService
             else
                 throw new NotFoundException(nameof(Project), dto.ProjectId.Value);           
         }
+
+        _logger.LogInformation("ProjectTask {ProjectTaskId} for Project {ProjectId} updated", 
+            task.Id, 
+            dto.ProjectId
+        );        
+
         await _uow.SaveChangesAsync(ct);
     }
 }

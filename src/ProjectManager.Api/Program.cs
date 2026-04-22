@@ -7,8 +7,15 @@ using ProjectManager.Domain.Repositories;
 using ProjectManager.Infrastructure.Persistence;
 using ProjectManager.Infrastructure.Persistence.Repositories;
 using ProjectManager.Infrastructure.Queries;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, services, configuration) => configuration
+    .ReadFrom.Configuration(context.Configuration)
+    .ReadFrom.Services(services)
+    .Enrich.FromLogContext()                  
+    .WriteTo.Console());
 
 builder.Services.AddControllers(); 
 builder.Services.AddEndpointsApiExplorer();
@@ -39,6 +46,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseSerilogRequestLogging(); 
 app.UseHttpsRedirection();
 app.MapControllers();
 
