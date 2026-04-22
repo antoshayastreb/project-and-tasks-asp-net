@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using ProjectManager.Application.Caching;
 using ProjectManager.Application.DTOs.ProjectTask;
 using ProjectManager.Application.Exceptions;
 using ProjectManager.Domain.Entities;
@@ -11,6 +12,7 @@ public class ProjectTaskService : IProjectTaskService
 {
     private ILogger<ProjectTaskService> _logger;
     private readonly IUnitOfWork _uow;
+    private readonly ICacheInvalidator _cacheInvalidator;
 
     private readonly IValidator<CreateProjectTaskDto> _createValidator;
     private readonly IValidator<UpdateProjectTaskDto> _updateValidator;    
@@ -19,13 +21,15 @@ public class ProjectTaskService : IProjectTaskService
         IUnitOfWork uow,
         ILogger<ProjectTaskService> logger,
         IValidator<CreateProjectTaskDto> createValidator,
-        IValidator<UpdateProjectTaskDto> updateValidator
+        IValidator<UpdateProjectTaskDto> updateValidator,
+        ICacheInvalidator cacheInvalidator
     )
     {
         _uow = uow;
         _logger = logger;
         _createValidator = createValidator;
         _updateValidator = updateValidator;
+        _cacheInvalidator = cacheInvalidator;
     }
 
     public async Task<Guid> CreateAsync(CreateProjectTaskDto dto, CancellationToken ct)
@@ -51,6 +55,9 @@ public class ProjectTaskService : IProjectTaskService
         );
 
         await _uow.SaveChangesAsync(ct);
+
+        _cacheInvalidator.InvalidateCache(CacheKeys.ProjectById(project.Id));
+
         return task.Id;
     }
 
@@ -70,6 +77,9 @@ public class ProjectTaskService : IProjectTaskService
         );
 
         await _uow.SaveChangesAsync(ct);
+
+        _cacheInvalidator.InvalidateCache(CacheKeys.ProjectById(task.ProjectId));
+        _cacheInvalidator.InvalidateCache(CacheKeys.ProjectTaskById(task.Id));
     }
 
     public async Task UpdateAsync(Guid id, UpdateProjectTaskDto dto, CancellationToken ct)
@@ -104,5 +114,8 @@ public class ProjectTaskService : IProjectTaskService
         );        
 
         await _uow.SaveChangesAsync(ct);
+
+        _cacheInvalidator.InvalidateCache(CacheKeys.ProjectById(task.ProjectId));
+        _cacheInvalidator.InvalidateCache(CacheKeys.ProjectTaskById(task.Id));
     }
 }

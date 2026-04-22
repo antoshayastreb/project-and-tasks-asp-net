@@ -2,6 +2,9 @@ using ProjectManager.Application.DTOs.Project;
 
 namespace ProjectManager.Application.Queries;
 
+/// <summary>
+/// Запросы на получение проектов.
+/// </summary>
 public interface IProjectQueries
 {
     /// <summary>

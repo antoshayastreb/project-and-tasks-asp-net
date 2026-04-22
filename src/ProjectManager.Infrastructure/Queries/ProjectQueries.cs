@@ -6,6 +6,9 @@ using ProjectManager.Infrastructure.Persistence;
 
 namespace ProjectManager.Infrastructure.Queries;
 
+/// <summary>
+/// Запросы на получение объектов проект из хранилища.
+/// </summary>
 public class ProjectQueries : IProjectQueries
 {
     private readonly AppDbContext _dbContext;
