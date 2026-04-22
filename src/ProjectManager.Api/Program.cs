@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using ProjectManager.Api.Middlewares;
 using ProjectManager.Application.DTOs.Project;
 using ProjectManager.Application.Queries;
 using ProjectManager.Application.Services;
@@ -16,6 +17,9 @@ Log.Logger  = new LoggerConfiguration()
 try
 {
     var builder = WebApplication.CreateBuilder(args);
+
+    builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+    builder.Services.AddProblemDetails();
 
     builder.Host.UseSerilog((context, services, configuration) => configuration
         .ReadFrom.Configuration(context.Configuration)
@@ -47,6 +51,7 @@ try
     app.UseSwagger();
     app.UseSwaggerUI();
 
+    app.UseExceptionHandler();
     app.UseSerilogRequestLogging(); 
     app.UseHttpsRedirection();
     app.MapControllers();
