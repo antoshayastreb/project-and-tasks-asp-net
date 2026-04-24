@@ -1,0 +1,59 @@
+using Microsoft.EntityFrameworkCore;
+using ProjectManager.Application.DTOs.Project;
+using ProjectManager.Application.DTOs.ProjectTask;
+using ProjectManager.Application.Queries;
+using ProjectManager.Infrastructure.Persistence;
+
+namespace ProjectManager.Infrastructure.Queries;
+
+/// <summary>
+/// Запросы на получение объектов проект из хранилища.
+/// </summary>
+public class ProjectQueries : IProjectQueries
+{
+    private readonly AppDbContext _dbContext;
+
+    public ProjectQueries(AppDbContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+    
+    public async Task<ProjectDto?> GetByIdAsync(Guid id, CancellationToken ct)
+    {
+        return await _dbContext.Projects.AsNoTracking()
+            .Include(p => p.Tasks)
+            .Where(p => p.Id == id)
+            .Select(p => new ProjectDto(
+                p.Id,
+                p.Name,
+                p.Description,
+                p.CreatedAt,
+                p.UpdatedAt,
+                p.Tasks.Select(t => new ProjectTaskListItemDto(
+                    t.Id,
+                    t.Title,
+                    t.Description,
+                    t.IsCompleted,
+                    t.CreatedAt,
+                    t.UpdatedAt
+                )).ToList()
+            ))
+            .FirstOrDefaultAsync(ct);
+    }
+
+    public async Task<IReadOnlyList<ProjectListDto>> GetAllAsync(int page, int pageSize, CancellationToken ct)
+    {
+        return await _dbContext.Projects.AsNoTracking()
+            .OrderBy(p => p.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(p => new ProjectListDto(
+                p.Id,
+                p.Name,
+                p.Description,
+                p.CreatedAt,
+                p.UpdatedAt
+            ))
+            .ToListAsync(ct);
+    }
+}
