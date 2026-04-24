@@ -80,7 +80,7 @@ public class ProjectsController : ControllerBase
     )
     {
         var id = await _projectService.CreateAsync(dto, ct);
-        return id;
+        return CreatedAtAction(nameof(Get), new { id }, id);
     }
 
     /// <summary>
