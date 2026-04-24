@@ -79,7 +79,8 @@ namespace ProjectManager.Api.Controllers
             CancellationToken ct = default
         )
         {
-            return await _service.CreateAsync(dto, ct);
+            var id = await _service.CreateAsync(dto, ct);
+            return CreatedAtAction(nameof(Get), new { id }, id);
         }
 
         /// <summary>
